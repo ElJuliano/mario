@@ -11,6 +11,8 @@ import com.jmolas.mario.screens.PlayScreen;
 public class MarioBros extends Game {
 	public static final int V_WIDTH = 400;
 	public static final int V_HEIGHT = 208;
+	//Pixel per meter
+	public static final float PPM = 100;
 	public SpriteBatch batch;
 	
 	@Override
