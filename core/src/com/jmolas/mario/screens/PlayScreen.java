@@ -21,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jmolas.mario.MarioBros;
+import com.jmolas.mario.Tools.B2WorldCreator;
 import com.jmolas.mario.scenes.Hud;
 import com.jmolas.mario.sprites.Mario;
 
@@ -72,59 +73,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fDef = new FixtureDef();
-        Body body;
-
-        //Create gound bodies / fixture
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2)/MarioBros.PPM, (rect.getY() + rect.getHeight() / 2)/MarioBros.PPM);
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2 / MarioBros.PPM, rect.getHeight() / 2 / MarioBros.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
-
-        //Create pipe/bodies fixture
-        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MarioBros.PPM, (rect.getY() + rect.getHeight() / 2) / MarioBros.PPM);
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2 / MarioBros.PPM, rect.getHeight() / 2 / MarioBros.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
-
-
-        //Create brick bodies /fixture
-        for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MarioBros.PPM, (rect.getY() + rect.getHeight() / 2) / MarioBros.PPM);
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2  / MarioBros.PPM, rect.getHeight() / 2 / MarioBros.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
-
-        //Create GiftBox bodies / fixture
-        for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2)  / MarioBros.PPM, (rect.getY() + rect.getHeight() / 2) / MarioBros.PPM);
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2 / MarioBros.PPM, rect.getHeight() / 2 / MarioBros.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
+        new B2WorldCreator(world, map);
 
         //Setting up mario
         player = new Mario(world);
@@ -205,6 +154,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        mapRenderer.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hud.dispose();
     }
 }
