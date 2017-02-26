@@ -1,5 +1,6 @@
 package com.jmolas.mario.sprites;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.jmolas.mario.MarioBros;
 import com.jmolas.mario.screens.PlayScreen;
 
@@ -16,6 +18,14 @@ import com.jmolas.mario.screens.PlayScreen;
 
 public class Mario extends Sprite {
 
+    public enum State {FALLING, RUNNING, JUMPING, STANDING};
+    public State currentState;
+    public State previousState;
+    public Animation<TextureRegion> marioRun;
+    public Animation<TextureRegion> marioJump;
+    public boolean runningRight;
+    public float stateTimer;
+
     public World world;
     public Body b2body;
     private TextureRegion marioStand;
@@ -23,14 +33,85 @@ public class Mario extends Sprite {
     public Mario (World w, PlayScreen screen) {
         super(screen.getAtlas().findRegion("NES - Super Mario Bros - Mario & Luigi"));
         this.world = w;
-        defineMario();
+
+        //Initializing states
+        currentState = State.STANDING;
+        previousState = State.STANDING;
+        stateTimer = 0;
+        runningRight = true;
+
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        for(int i = 1; i < 4; i++) {
+            frames.add(new TextureRegion(getTexture(), 80 + i * 16, 170, 16, 16));
+        }
+        marioRun = new Animation(0.1f, frames);
+        frames.clear();
+
+        for(int i = 4; i < 6; i++) {
+            frames.add(new TextureRegion(getTexture(),80 + i * 16, 170, 16, 16));
+        }
+        marioJump = new Animation(0.1f, frames);
+
         marioStand = new TextureRegion(getTexture(), 80, 170 , 16, 16);
+
+        defineMario();
+
         setBounds(0, 0, 16/MarioBros.PPM, 16/MarioBros.PPM);
         setRegion(marioStand);
     }
 
     public void update(float dt){
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(getFrame(dt));
+    }
+
+    public TextureRegion getFrame(float dt){
+        currentState = getState();
+
+        TextureRegion region;
+        switch(currentState) {
+            case JUMPING:
+                region = marioJump.getKeyFrame(stateTimer);
+                break;
+            case RUNNING:
+                region = marioRun.getKeyFrame(stateTimer, true);
+                break;
+            case FALLING:
+            case STANDING:
+            default :
+                region = marioStand;
+                break;
+
+        }
+
+        if((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()){
+            region.flip(true, false);
+            runningRight = false;
+        }
+        else if((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()){
+            region.flip(true, false);
+            runningRight= true;
+
+            stateTimer = currentState == previousState ? stateTimer + dt : 0;
+            previousState = currentState;
+        }
+
+        return region;
+    }
+
+    public State getState() {
+        if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING)) {
+            return State.JUMPING;
+        }
+        else if(b2body.getLinearVelocity().y != 0){
+            return State.FALLING;
+        }
+        else if(b2body.getLinearVelocity().x != 0){
+            return State.RUNNING;
+        }
+        else {
+            return State.STANDING;
+        }
     }
 
     private void defineMario() {
