@@ -1,0 +1,19 @@
+
+mario_and_ennemies.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+NES - Super Mario Bros - Mario & Luigi
+  rotate: false
+  xy: 1, 131
+  size: 447, 687
+  orig: 447, 687
+  offset: 0, 0
+  index: -1
+NES - Super Mario Bros - Enemies
+  rotate: false
+  xy: 1, 1
+  size: 808, 128
+  orig: 808, 128
+  offset: 0, 0
+  index: -1

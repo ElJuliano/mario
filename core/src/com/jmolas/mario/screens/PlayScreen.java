@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -50,7 +51,12 @@ public class PlayScreen implements Screen {
     // Mario setting
     private Mario player;
 
+    //Atlas
+    private TextureAtlas atlas;
+
     public PlayScreen(MarioBros game){
+
+        atlas = new TextureAtlas("mario_and_ennemies.pack");
         this.game = game;
         //Create a cam to follow Mario through the cam
         gameCam = new OrthographicCamera();
@@ -76,10 +82,13 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(world, map);
 
         //Setting up mario
-        player = new Mario(world);
+        player = new Mario(world, this);
 
     }
 
+    public TextureAtlas getAtlas() {
+        return this.atlas;
+    }
 
 
     @Override
@@ -95,6 +104,8 @@ public class PlayScreen implements Screen {
         world.step(1/60f, 6, 2);
 
         gameCam.position.x = player.b2body.getPosition().x;
+
+        player.update(dt);
 
         gameCam.update();
         //Tell our renderer to dra only what camera see in pur gameworld
@@ -127,6 +138,12 @@ public class PlayScreen implements Screen {
         //Render our b2dr
         b2dr.render(world, gameCam.combined);
 
+        game.batch.setProjectionMatrix(gameCam.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
+
+        // Set our batch to now draw what the HUD camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
