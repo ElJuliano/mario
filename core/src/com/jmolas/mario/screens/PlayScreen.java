@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jmolas.mario.MarioBros;
 import com.jmolas.mario.Tools.B2WorldCreator;
+import com.jmolas.mario.Tools.WorldContactListener;
 import com.jmolas.mario.scenes.Hud;
 import com.jmolas.mario.sprites.Mario;
 
@@ -84,6 +85,8 @@ public class PlayScreen implements Screen {
         //Setting up mario
         player = new Mario(world, this);
 
+        //Setting the contact listener
+        world.setContactListener( new WorldContactListener());
     }
 
     public TextureAtlas getAtlas() {

@@ -3,9 +3,11 @@ package com.jmolas.mario.sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -29,6 +31,7 @@ public class Mario extends Sprite {
     public World world;
     public Body b2body;
     private TextureRegion marioStand;
+    private TextureRegion marioFallOfEdges;
 
     public Mario (World w, PlayScreen screen) {
         super(screen.getAtlas().findRegion("NES - Super Mario Bros - Mario & Luigi"));
@@ -53,6 +56,7 @@ public class Mario extends Sprite {
         marioJump = new Animation(0.1f, frames);
 
         marioStand = new TextureRegion(getTexture(), 80, 170 , 15, 16);
+        marioFallOfEdges = new TextureRegion(getTexture(), 90, 170, 15, 16);
 
         defineMario();
 
@@ -124,5 +128,12 @@ public class Mario extends Sprite {
 
         fdef.shape = circle;
         b2body.createFixture(fdef);
+
+        EdgeShape head  =new EdgeShape();
+        head.set(new Vector2(-2 / MarioBros.PPM, 6 / MarioBros.PPM), new Vector2(2 / MarioBros.PPM, 6 / MarioBros.PPM));
+        fdef.shape = head;
+        fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData("head");
     }
 }
