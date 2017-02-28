@@ -110,6 +110,9 @@ public class PlayScreen implements Screen {
 
         player.update(dt);
 
+        //Updating timer
+        hud.update(dt);
+
         gameCam.update();
         //Tell our renderer to dra only what camera see in pur gameworld
         mapRenderer.setView(gameCam);

@@ -21,7 +21,7 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
 
-    private Integer worldimer;
+    private Integer worldTimer;
     private Integer score;
     private float timeCount;
 
@@ -33,7 +33,7 @@ public class Hud implements Disposable {
     Label marioLabel;
 
     public Hud(SpriteBatch sb) {
-        worldimer = 300;
+        worldTimer = 300;
         timeCount = 0;
         score = 0;
 
@@ -47,7 +47,7 @@ public class Hud implements Disposable {
         table.setFillParent(true);
 
         //Instantiate labels
-        countDownLabel = new Label(String.format("%03d", worldimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        countDownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -70,5 +70,13 @@ public class Hud implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+    public void update(float dt){
+        timeCount += dt;
+        if(timeCount >= 1) {
+            worldTimer --;
+            countDownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
     }
 }
