@@ -28,7 +28,9 @@ public class GiftBox extends InteractiveTileObject {
     @Override
     public void onHeadHit() {
         Gdx.app.log("gift.collision", "");
+        if(getCell().getTile().getId() != BLANK_GIFT) {
+            Hud.addScore(100);
+        }
         getCell().setTile(tileSet.getTile(BLANK_GIFT));
-        Hud.addScore(100);
     }
 }
