@@ -1,5 +1,6 @@
 package com.jmolas.mario.Tools;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,7 +20,7 @@ import com.jmolas.mario.sprites.GiftBox;
 
 public class B2WorldCreator {
 
-    public B2WorldCreator(World world, TiledMap map){
+    public B2WorldCreator(World world, TiledMap map, AssetManager manager){
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -54,13 +55,13 @@ public class B2WorldCreator {
         //Create brick bodies /fixture
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new Brick(world, map, rect);
+            new Brick(world, map, rect, manager);
         }
 
         //Create GiftBox bodies / fixture
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new GiftBox(world, map, rect);
+            new GiftBox(world, map, rect, manager);
         }
 
     }

@@ -1,5 +1,6 @@
 package com.jmolas.mario.sprites;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -25,7 +26,11 @@ public abstract class InteractiveTileObject {
     protected Rectangle bounds;
     protected Body body;
     protected Fixture fixture;
-    public InteractiveTileObject(World world, TiledMap map, Rectangle rect) {
+
+    protected AssetManager manager;
+
+    public InteractiveTileObject(World world, TiledMap map, Rectangle rect, AssetManager m) {
+        this.manager = m;
         this.world = world;
         this.map = map;
         this.bounds = rect;

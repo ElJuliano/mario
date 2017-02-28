@@ -3,6 +3,8 @@ package com.jmolas.mario.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -54,10 +56,14 @@ public class PlayScreen implements Screen {
 
     //Atlas
     private TextureAtlas atlas;
+    //Music
+    private Music music;
+    private AssetManager manager;
 
-    public PlayScreen(MarioBros game){
+    public PlayScreen(MarioBros game, AssetManager m){
 
         atlas = new TextureAtlas("mario_and_ennemies.pack");
+        this.manager = m;
         this.game = game;
         //Create a cam to follow Mario through the cam
         gameCam = new OrthographicCamera();
@@ -80,13 +86,18 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(world, map);
+        new B2WorldCreator(world, map, manager);
 
         //Setting up mario
         player = new Mario(world, this);
 
         //Setting the contact listener
         world.setContactListener( new WorldContactListener());
+
+        //Music initialization
+        music = manager.get("audio/music/mainTheme.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     public TextureAtlas getAtlas() {

@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,8 +32,33 @@ public class MarioBros extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		manager = new AssetManager();
-		manager.load("");
-		setScreen(new PlayScreen(this));
+		//Loading main music
+		manager.load("audio/music/mainTheme.mp3", Music.class);
+		//Loading sounds
+		manager.load("audio/sounds/1up.wav", Sound.class);
+		manager.load("audio/sounds/Beep.wav", Sound.class);
+		manager.load("audio/sounds/Big_Jump.wav", Sound.class);
+		//manager.load("audio/sounds/Browser_Die.wav", Sound.class);
+		manager.load("audio/sounds/Break.wav", Sound.class);
+		manager.load("audio/sounds/Bump.wav", Sound.class);
+		manager.load("audio/sounds/Coin.wav", Sound.class);
+		manager.load("audio/sounds/Die.wav", Sound.class);
+		manager.load("audio/sounds/Fire_Ball.wav", Sound.class);
+		manager.load("audio/sounds/Flagpole.wav", Sound.class);
+		manager.load("audio/sounds/Game_Over.wav", Sound.class);
+		manager.load("audio/sounds/Item.wav", Sound.class);
+		manager.load("audio/sounds/Jump.wav", Sound.class);
+		manager.load("audio/sounds/Kick.wav", Sound.class);
+		manager.load("audio/sounds/Pause.wav", Sound.class);
+		manager.load("audio/sounds/Powerup.wav", Sound.class);
+		manager.load("audio/sounds/Skid.wav", Sound.class);
+		manager.load("audio/sounds/Squish.wav", Sound.class);
+		manager.load("audio/sounds/Thwomp.wav", Sound.class);
+		manager.load("audio/sounds/Vine.wav", Sound.class);
+		manager.load("audio/sounds/Warp.wav", Sound.class);
+
+		manager.finishLoading();
+		setScreen(new PlayScreen(this, manager));
 	}
 
 	@Override

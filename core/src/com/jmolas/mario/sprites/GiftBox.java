@@ -1,6 +1,8 @@
 package com.jmolas.mario.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
@@ -18,8 +20,8 @@ public class GiftBox extends InteractiveTileObject {
     private static TiledMapTileSet tileSet;
     private final int BLANK_GIFT = 28;
 
-    public GiftBox(World world, TiledMap map, Rectangle bounds) {
-        super(world, map, bounds);
+    public GiftBox(World world, TiledMap map, Rectangle bounds, AssetManager m) {
+        super(world, map, bounds, m);
         tileSet = map.getTileSets().getTileSet("Mario");
         fixture.setUserData(this);
         setCategoryFilter(MarioBros.GIFT_BIT);
@@ -30,6 +32,10 @@ public class GiftBox extends InteractiveTileObject {
         Gdx.app.log("gift.collision", "");
         if(getCell().getTile().getId() != BLANK_GIFT) {
             Hud.addScore(100);
+            manager.get("audio/sounds/Coin.wav", Sound.class).play();
+        }
+        else {
+            manager.get("audio/sounds/Bump.wav", Sound.class).play();
         }
         getCell().setTile(tileSet.getTile(BLANK_GIFT));
     }
