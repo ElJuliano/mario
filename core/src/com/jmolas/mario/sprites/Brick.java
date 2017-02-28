@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.jmolas.mario.MarioBros;
+import com.jmolas.mario.scenes.Hud;
 
 /**
  * Created by Julien on 06/02/2017.
@@ -23,5 +24,7 @@ public class Brick extends InteractiveTileObject {
         Gdx.app.log("brick.collision", "");
         setCategoryFilter(MarioBros.DESTROYED_BIT);
         getCell().setTile(null);
+        //incrementing the score
+        Hud.addScore(200);
     }
 }

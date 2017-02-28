@@ -22,11 +22,11 @@ public class Hud implements Disposable {
     private Viewport viewport;
 
     private Integer worldTimer;
-    private Integer score;
+    private static Integer score;
     private float timeCount;
 
     Label countDownLabel;
-    Label scoreLabel;
+    private static Label scoreLabel;
     Label timeLabel;
     Label levelLabel;
     Label worldLabel;
@@ -71,6 +71,11 @@ public class Hud implements Disposable {
     public void dispose() {
         stage.dispose();
     }
+
+    /**
+     * Updating the timer
+     * @param dt
+     */
     public void update(float dt){
         timeCount += dt;
         if(timeCount >= 1) {
@@ -78,5 +83,14 @@ public class Hud implements Disposable {
             countDownLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
         }
+    }
+
+    /**
+     * Updating the score
+     * @param value
+     */
+    public static void addScore(int value){
+        score += value;
+        scoreLabel.setText(String.format("%03d", score));
     }
 }
