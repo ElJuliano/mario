@@ -18,6 +18,7 @@ public class GiftBox extends InteractiveTileObject {
     public GiftBox(World world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
         fixture.setUserData(this);
+        setCategoryFilter(MarioBros.GIFT_BIT);
     }
 
     @Override
