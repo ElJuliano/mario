@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.jmolas.mario.MarioBros;
 import com.jmolas.mario.scenes.Hud;
+import com.jmolas.mario.screens.PlayScreen;
 
 /**
  * Created by Julien on 06/02/2017.
@@ -20,8 +21,8 @@ public class GiftBox extends InteractiveTileObject {
     private static TiledMapTileSet tileSet;
     private final int BLANK_GIFT = 28;
 
-    public GiftBox(World world, TiledMap map, Rectangle bounds, AssetManager m) {
-        super(world, map, bounds, m);
+    public GiftBox(PlayScreen screen, Rectangle bounds, AssetManager m) {
+        super(screen, bounds, m);
         tileSet = map.getTileSets().getTileSet("Mario");
         fixture.setUserData(this);
         setCategoryFilter(MarioBros.GIFT_BIT);

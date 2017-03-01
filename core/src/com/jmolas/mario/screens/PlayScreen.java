@@ -27,6 +27,7 @@ import com.jmolas.mario.MarioBros;
 import com.jmolas.mario.Tools.B2WorldCreator;
 import com.jmolas.mario.Tools.WorldContactListener;
 import com.jmolas.mario.scenes.Hud;
+import com.jmolas.mario.sprites.Goomba;
 import com.jmolas.mario.sprites.Mario;
 
 
@@ -53,6 +54,9 @@ public class PlayScreen implements Screen {
 
     // Mario setting
     private Mario player;
+
+    //Enemies
+    private Goomba goomba;
 
     //Atlas
     private TextureAtlas atlas;
@@ -86,7 +90,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(world, map, manager);
+        new B2WorldCreator(this, manager);
 
         //Setting up mario
         player = new Mario(world, this);
@@ -98,6 +102,9 @@ public class PlayScreen implements Screen {
         music = manager.get("audio/music/mainTheme.mp3");
         music.setLooping(true);
         music.play();
+
+        //enemies def
+        goomba = new Goomba(this, .32f, .32f);
     }
 
     public TextureAtlas getAtlas() {
@@ -120,6 +127,9 @@ public class PlayScreen implements Screen {
         gameCam.position.x = player.b2body.getPosition().x;
 
         player.update(dt);
+
+        //update enemies
+        goomba.update(dt);
 
         //Updating timer
         hud.update(dt);
@@ -158,6 +168,8 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        //Rendering enemies
+        goomba.draw(game.batch);
         game.batch.end();
 
         // Set our batch to now draw what the HUD camera sees
@@ -170,6 +182,15 @@ public class PlayScreen implements Screen {
     public void resize(int width, int height) {
         gamePort.update(width, height);
     }
+
+    public TiledMap getMap() {
+        return map;
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
 
     @Override
     public void pause() {

@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.jmolas.mario.MarioBros;
+import com.jmolas.mario.screens.PlayScreen;
 
 /**
  * Created by Julien on 06/02/2017.
@@ -29,10 +30,10 @@ public abstract class InteractiveTileObject {
 
     protected AssetManager manager;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle rect, AssetManager m) {
+    public InteractiveTileObject(PlayScreen screen, Rectangle rect, AssetManager m) {
         this.manager = m;
-        this.world = world;
-        this.map = map;
+        this.world = screen.getWorld();
+        this.map = screen.getMap();
         this.bounds = rect;
 
         BodyDef bdef = new BodyDef();

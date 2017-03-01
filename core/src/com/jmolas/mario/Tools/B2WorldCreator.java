@@ -11,8 +11,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.jmolas.mario.MarioBros;
+import com.jmolas.mario.screens.PlayScreen;
 import com.jmolas.mario.sprites.Brick;
 import com.jmolas.mario.sprites.GiftBox;
+
+import java.util.Map;
 
 /**
  * Created by Julien on 06/02/2017.
@@ -20,8 +23,10 @@ import com.jmolas.mario.sprites.GiftBox;
 
 public class B2WorldCreator {
 
-    public B2WorldCreator(World world, TiledMap map, AssetManager manager){
+    public B2WorldCreator(PlayScreen screen, AssetManager manager){
 
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fDef = new FixtureDef();
@@ -48,6 +53,7 @@ public class B2WorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 / MarioBros.PPM, rect.getHeight() / 2 / MarioBros.PPM);
             fDef.shape = shape;
+            fDef.filter.categoryBits = MarioBros.OBJECT_BIT;
             body.createFixture(fDef);
         }
 
@@ -55,13 +61,13 @@ public class B2WorldCreator {
         //Create brick bodies /fixture
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new Brick(world, map, rect, manager);
+            new Brick(screen, rect, manager);
         }
 
         //Create GiftBox bodies / fixture
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new GiftBox(world, map, rect, manager);
+            new GiftBox(screen, rect, manager);
         }
 
     }
